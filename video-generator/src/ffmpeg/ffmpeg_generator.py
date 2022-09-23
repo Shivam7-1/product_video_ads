@@ -501,7 +501,7 @@ class FFMPEGGenerator(object):
                 include_args += ['-c:v', 'gif']
 
             # include_args += ['-analyzeduration', '2147483647', '-probesize', '2147483647']
-            # include_args += ['-thread_queue_size', str(self.thread_queue_size), '-re']
+            include_args += ['-thread_queue_size', str(self.thread_queue_size)]
             include_args += ['-i']
 
             # Resize all images to avoid FFMPEG to run with unecessary large images
