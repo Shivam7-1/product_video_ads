@@ -29,6 +29,7 @@ from image.image_processor import ImageProcessor as ImageProcessor
 from storage.cloud_storage_handler import CloudStorageHandler as CloudStorageHandler
 from storage.drive_storage_handler import DriveStorageHandler as StorageHandler
 from uploader.youtube_upload import YoutubeUploader as Uploader
+from uploader.youtube_upload import AssetLibraryUploader as AdsAssetUploader
 from video.video_generator import VideoGenerator as VideoGenerator
 # Handles video processing
 from video.video_processor import VideoProcessor as VideoProcessor
@@ -41,6 +42,8 @@ def main():
     spreadsheet_id = os.environ.get('SPREADSHEET_ID')
     gcs_bucket_name = os.environ.get('GCS_BUCKET_NAME')
     gcp_project_number = os.environ.get('GCP_PROJECT_NUMBER')
+    developer_token = os.environ.get('ADS_DEVELOPER_TOKEN')
+    ads_client_id = os.environ.get('ADS_CLIENT_ID')
     cloud_preview = False
 
     if spreadsheet_id is None:
@@ -60,7 +63,13 @@ def main():
     storage = StorageHandler(configuration.get_drive_folder(), credentials)
     cloud_storage = CloudStorageHandler(gcs_bucket_name=gcs_bucket_name)
     video_processor = VideoProcessor(
-        storage, VideoGenerator(), Uploader(credentials), cloud_storage, cloud_preview)
+        storage,
+        VideoGenerator(), 
+        Uploader(
+            credentials, 
+            AdsAssetUploader(credentials,customer_id,developer_token)),
+        cloud_storage,
+        cloud_preview)
     image_processor = ImageProcessor(storage, ImageGenerator(), cloud_storage, cloud_preview)
 
     # Handler acts as facade

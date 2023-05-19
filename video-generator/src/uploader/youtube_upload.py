@@ -44,11 +44,12 @@ RETRIABLE_STATUS_CODES = [500, 502, 503, 504]
 class YoutubeUploader():
     logger = log.getLogger()
 
-    def __init__(self, credentials):
+    def __init__(self, credentials, assetUploader):
         self.youtube = build('youtube', 'v3', credentials=credentials,
                              cache_discovery=False)
 
         self.logger.info('Youtube Video uploader initiated...')
+        self.assetUploader = assetUploader
 
     # This method implements an exponential backoff strategy to resume a
     # failed upload.

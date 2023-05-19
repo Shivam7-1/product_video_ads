@@ -56,7 +56,8 @@ enableApis(){
         sheets.googleapis.com \
         youtube.googleapis.com \
         storagetransfer.googleapis.com \
-        container.googleapis.com
+        container.googleapis.com \
+        googleads.googleapis.com
 }
 
 selectSpreadsheet(){
