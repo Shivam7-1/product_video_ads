@@ -19,37 +19,41 @@ limitations under the License.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  
   production: true,
 
-  client_id: window['__env'].client_id,
-  api_key: window['__env'].api_key,
-  
-  discovery_docs: ["https://sheets.googleapis.com/$discovery/rest?version=v4", "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest", "https://www.googleapis.com/discovery/v1/apis/storage/v1/rest"],
-  scopes: "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/devstorage.read_only",
-  drive_file_prefix: 'https://drive.google.com/u/0/uc?export=download&id=',
-  youtube_prefix: 'https://www.youtube.com/embed/',
-  gsutil_uri_prefix: 'gs://',
-  gcs_url_prefix: 'https://storage.cloud.google.com/',
+  client_id: window["__env"].client_id,
+  api_key: window["__env"].api_key,
 
-  sheet_id: 'sheet_id',
+  discovery_docs: [
+    "https://sheets.googleapis.com/$discovery/rest?version=v4",
+    "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest",
+    "https://www.googleapis.com/discovery/v1/apis/storage/v1/rest",
+    "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest",
+  ],
+  scopes:
+    "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/devstorage.read_only https://www.googleapis.com/auth/youtube.force-ssl",
+  drive_file_prefix: "https://drive.google.com/u/0/uc?export=download&id=",
+  youtube_prefix: "https://www.youtube.com/embed/",
+  gsutil_uri_prefix: "gs://",
+  gcs_url_prefix: "https://storage.cloud.google.com/",
 
+  sheet_id: "sheet_id",
 
-  template_drive_folder: '1UyUFgNbLNrAA0UDucdIxZlX9Jt07Bap2',
-  template_sheet_id: '1vIVGT9sgF6mc-3vDoXfhOyOu57LaNXCsXJ5UYw0VECE',
+  template_drive_folder: "1UyUFgNbLNrAA0UDucdIxZlX9Jt07Bap2",
+  template_sheet_id: "1vIVGT9sgF6mc-3vDoXfhOyOu57LaNXCsXJ5UYw0VECE",
 
   configuration: {
-    campaign_range: 'Campaigns!A2:E',
-    campaign_single_range: 'Campaigns!A$INDEX:E$INDEX',
-    product_range: '!A1:ZZ',
-    drive_folder: 'Configuration!C6',
-    static_assets: 'Static!A2:C',
-    offer_types_range: 'OfferTypes!A2:D',
-    bases_range: 'Bases!A2:C',
-    logs_range: 'Generator!A1:A',
-    ads_defaults: 'Ads!C3:C9'
-  }
-}
+    campaign_range: "Campaigns!A2:E",
+    campaign_single_range: "Campaigns!A$INDEX:E$INDEX",
+    product_range: "!A1:ZZ",
+    drive_folder: "Configuration!C6",
+    static_assets: "Static!A2:C",
+    offer_types_range: "OfferTypes!A2:D",
+    bases_range: "Bases!A2:C",
+    logs_range: "Generator!A1:A",
+    ads_defaults: "Ads!C3:C9",
+  },
+};
 
 /*
  * For easier debugging in development mode, you can import the following file

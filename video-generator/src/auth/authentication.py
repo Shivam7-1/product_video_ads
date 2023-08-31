@@ -48,3 +48,12 @@ def get_credentials_for_service_account(service_account_name):
     
     # credentials.refresh(Request())
     return credentials
+
+
+def get_credentials_from_local_file():
+    if not os.path.exists('token'):
+        log.getLogger().error('Token file not found')
+        return None
+
+    with open('token', 'rb') as token_file:
+        return pickle.loads(token_file.read())
