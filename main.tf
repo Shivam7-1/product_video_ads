@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/google"
       version = "4.51.0"
     }
+    gdrive = {
+      source = "michael-richard-3r/gdrive"
+      version = "0.4.1"
+    }
   }
 }
 
@@ -27,4 +31,7 @@ resource "google_iap_client" "project_client" {
   brand        = google_iap_brand.project_brand.name
 }
 
-
+resource "google_service_account" "pva_account" {
+  account_id = "pva-service-account"
+  display_name = "PVA Service Account"
+}

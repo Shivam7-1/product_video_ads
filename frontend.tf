@@ -12,9 +12,20 @@ resource "null_resource" "frontend_install_deps" {
   }
 }
 
-resource "null_resource" "frontend_build" {
+resource "null_resource" "watch_frontend_src" {
   triggers = {
     always = "${uuid()}"
+  }
+
+  provisioner "local-exec" {
+    # command = "find -s ${var.frontend_dir}/src -type f -exec md5sum {} | md5sum > frontend-checksum"
+    command = "find ${var.frontend_dir}/src -type f -print0 | xargs -0 sha1sum | sha1sum > frontend-checksum"
+  }
+}
+
+resource "null_resource" "frontend_build" {
+  triggers = {
+    src_changed = "${sha1(file("frontend-checksum"))}"
   }
   provisioner "local-exec" {
     working_dir = var.frontend_dir
@@ -22,27 +33,24 @@ resource "null_resource" "frontend_build" {
   }
 
   depends_on = [
-    null_resource.frontend_install_deps
+    null_resource.frontend_install_deps,
+    null_resource.watch_frontend_src
   ]
 }
 
-resource "null_resource" "remove_dist_env_js" {
-  triggers = {
-    always = "${uuid()}"
-  }
-  provisioner "local-exec" {
-    command = "rm -f ${var.frontend_dir}/dist/assets/js/env.js"
-  }
+resource "local_file" "dist_env_js" {
+  # triggers = {
+  #   env_js = "${sha1(file("${var.frontend_dir}/src/assets/js/env.js"))}"
+  # }
+  # provisioner "file" {
+  content = templatefile("${var.frontend_dir}/src/assets/js/env.js", {
+    FRONTEND_CLIENT_ID = google_iap_client.project_client.client_id
+    FRONTEND_API_KEY   = google_iap_client.project_client.secret
+  })
+  # destination = "${var.frontend_dir}/dist/assets/js/env.js"
+  # }
+  filename   = "${var.frontend_dir}/dist/assets/js/env.js"
   depends_on = [null_resource.frontend_build]
-}
-
-resource "local_file" "replace_values_in_env_js" {
-  content = replace(replace(file("${var.frontend_dir}/src/assets/js/env.js"),
-    "$FRONTEND_CLIENT_ID", google_iap_client.project_client.client_id),
-  "$FRONTEND_API_KEY", google_iap_client.project_client.secret)
-  filename = "${var.frontend_dir}/dist/assets/js/env.js"
-
-  depends_on = [null_resource.remove_dist_env_js]
 }
 
 resource "null_resource" "frontend_package" {
@@ -51,7 +59,7 @@ resource "null_resource" "frontend_package" {
     command     = "zip -r app.zip dist"
   }
 
-  depends_on = [local_file.replace_values_in_env_js]
+  depends_on = [local_file.dist_env_js]
 }
 
 resource "google_storage_bucket" "frontend_staging" {
