@@ -16,10 +16,12 @@
 
 ## 
 export TF_VAR_project_id=$(gcloud config get-value project)
+export TF_VAR_service_account_name="PVA Service Account"
 touch frontend-checksum
 gcloud services enable compute.googleapis.com container.googleapis.com drive.googleapis.com
 terraform init
 terraform import google_storage_bucket.frontend_staging pva_frontend_staging
-terraform import google_iap_brand.project_brand $(gcloud alpha iap oauth-brands list | grep name: | sed "s/name: //") || true
-terraform import google_service_account.pva_account $(gcloud iam service-accounts list | grep pva-service-account | sed "s/EMAIL: //") || true
+terraform import google_iap_brand.project_brand $(gcloud alpha iap oauth-brands list --format="value(name)") || true
+terraform import google_service_account.pva_account $(gcloud iam service-accounts list --format="value(email)" --filter=displayName:"$TF_VAR_service_account_name") || true
+# terraform import google_compute_network.vpc
 terraform apply

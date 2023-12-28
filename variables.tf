@@ -9,3 +9,5 @@ variable "project_id" {}
 variable "frontend_dir" {
     default = "frontend"
 }
+
+variable "service_account_name" {}

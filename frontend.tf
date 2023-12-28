@@ -63,7 +63,7 @@ resource "null_resource" "frontend_package" {
 }
 
 resource "google_storage_bucket" "frontend_staging" {
-  name                        = "pva_frontend_staging"
+  name                        = "frontend-staging"
   location                    = var.region
   force_destroy               = true
   uniform_bucket_level_access = true
